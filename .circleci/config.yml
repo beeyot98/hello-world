@@ -17,6 +17,19 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
+  
+  build-env:
+    docker:
+      - image: circleci/node:13.8.0
+
+    steps:
+      - checkout
+      - run:
+          name: "What branch am I on now?"
+          command: echo $My_new_env
+          
+
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -24,3 +37,4 @@ workflows:
   say-hello-workflow:
     jobs:
       - say-hello
+      - build-env
