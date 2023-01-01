@@ -26,7 +26,7 @@ jobs:
       - checkout
       - run:
           name: "What branch am I on now?"
-          command: echo $My_new_env
+          command: echo $New_env_var
           
 
 
