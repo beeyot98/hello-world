@@ -1,7 +1,7 @@
 version: 2.1
-  # Choose either one of the orbs below
-  # welcome: circleci/welcome-orb@0.4.1
-  # aws-cli: circleci/aws-cli@2.0.3
+
+orbs:
+  aws-cli: circleci/aws-cli@2.0.3
 # Define the jobs we want to run for this project
 jobs:
   create_infrastructure: 
@@ -23,16 +23,16 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-              # You can get this ID in the section where you registered the SSH Key
               fingerprints: ["42:33:10:cc:0a:5e:5a:33:49:e6:c1:23:db:a5:05:9a"] 
       - run:
-          name: Install Ansible
+          name: Install dependencies
           command: |
-            apk add --update ansible
+            # install the dependencies needed for your playbook
+            apk add --update ansible 
       - run:
-          name: Run Playbook and Configure server
+          name: Configure server
           command: |
-            sudo ansible-playbook -i inventory main-remote.yml 
+            ansible-playbook -i inventory.txt main-remote.yml
 # Sequential workflow
 workflows:
   # Name the workflow
