@@ -16,6 +16,16 @@ jobs:
                 --template-file template.yml \
                 --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
                 --region us-east-1
+  commands:
+      destroy_environment:
+        steps:
+          - run:
+              name: Destroy environment
+              # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable 
+              # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 5 chars of the variable CIRCLE_CI_WORKFLOW_ID 
+              when: on_fail
+              command: |
+                aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5}
                 
   configure_infrastructure: 
     docker:
@@ -42,7 +52,7 @@ jobs:
       - run:
           name: smoke test
           command: |
-            URL="https://blog.udacity.com/"
+            URL="https://blog.udacity5.com/"
             # Test if website exists
             if curl -s --head ${URL} 
             then
@@ -50,6 +60,7 @@ jobs:
             else
               return 1
             fi
+      - destroy_environment 
 # Sequential workflow
 workflows:
   # Name the workflow
@@ -57,3 +68,4 @@ workflows:
     jobs:
         - create_infrastructure
         - configure_infrastructure
+        - smoke_test
